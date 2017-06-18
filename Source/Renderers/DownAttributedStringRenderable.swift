@@ -14,13 +14,15 @@ public protocol DownAttributedStringRenderable: DownHTMLRenderable {
      Generates an `NSAttributedString` from the `markdownString` property
 
      - parameter options: `DownOptions` to modify parsing or rendering
+     
+     - parameter styling: add css `String` to modify content styling
 
      - throws: `DownErrors` depending on the scenario
 
      - returns: An `NSAttributedString`
      */
     
-    func toAttributedString(_ options: DownOptions) throws -> NSAttributedString
+    func toAttributedString(_ options: DownOptions, styling: String) throws -> NSAttributedString
 }
 
 public extension DownAttributedStringRenderable {
@@ -28,14 +30,17 @@ public extension DownAttributedStringRenderable {
      Generates an `NSAttributedString` from the `markdownString` property
 
      - parameter options: `DownOptions` to modify parsing or rendering, defaulting to `.Default`
+     
+     - parameter styling: add css `String` to modify content styling
 
      - throws: `DownErrors` depending on the scenario
 
      - returns: An `NSAttributedString`
      */
     
-    public func toAttributedString(_ options: DownOptions = .Default) throws -> NSAttributedString {
+    public func toAttributedString(_ options: DownOptions = .Default, styling: String = "") throws -> NSAttributedString {
         let html = try self.toHTML(options)
-        return try NSAttributedString(htmlString: html)
+        let htmlFinal = styling.appending(html)
+        return try NSAttributedString(htmlString: htmlFinal)
     }
 }
